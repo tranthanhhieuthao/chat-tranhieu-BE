@@ -20,4 +20,6 @@ public interface UserRepository extends JpaRepository<User, Long> {
                     "from AddFriend addFriend inner join addFriend.userFriend userFriend inner join addFriend.user userLogin " +
                     "where userLogin.id = :id")
     Page<FriendDTO> findFriendsById(@Param("id") Long id, Pageable pageable);
+
+    User findByGmail(String gmail);
 }

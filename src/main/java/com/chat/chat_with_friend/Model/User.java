@@ -27,6 +27,8 @@ public class User extends BaseClass {
     @Column(name = "gmail")
     private String gmail;
 
+    private String password;
+
     @Lob
     @Column(name = "avatar", length = Integer.MAX_VALUE)
     private byte[] avatar;

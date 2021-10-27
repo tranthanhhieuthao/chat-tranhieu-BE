@@ -2,6 +2,7 @@ package com.chat.chat_with_friend.Service;
 
 import com.chat.chat_with_friend.DTO.CommentChatDTO;
 import com.chat.chat_with_friend.DTO.GroupChatDTO;
+import com.chat.chat_with_friend.Model.ChatMessage;
 import com.chat.chat_with_friend.Model.GroupChat;
 import com.chat.chat_with_friend.Model.GroupUserDetail;
 import com.chat.chat_with_friend.Model.User;
@@ -47,16 +48,16 @@ public class GroupChatService {
         return ResponseFormat.simpleSuccess(groupChatDTO);
     }
 
-    public ResponseFormat addUserIntoGroupChat(CommentChatDTO chatDTO) {
+    public ResponseFormat addUserIntoGroupChat(Long idUser, Long idGroupChat, ChatMessage chatMessage) {
         GroupUserDetail groupUserDetail = new GroupUserDetail();
-        User user = userRepository.getById(chatDTO.getIdUser());
-        GroupChat groupChat = groupChatRepository.getById(chatDTO.getIdGroupChat());
+        User user = userRepository.getById(idUser);
+        GroupChat groupChat = groupChatRepository.getById(idGroupChat);
         if (user == null || groupChat == null) {
             return ResponseFormat.simpleNotExits();
         }
         groupUserDetail.setGroupChat(groupChat);
         groupUserDetail.setUser(user);
         groupUserDetailRepository.save(groupUserDetail);
-        return ResponseFormat.simpleSuccess(null);
+        return ResponseFormat.simpleSuccess(chatMessage);
     }
 }

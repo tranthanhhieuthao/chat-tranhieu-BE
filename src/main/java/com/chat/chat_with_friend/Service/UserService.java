@@ -38,6 +38,10 @@ public class UserService {
     }
 
     public ResponseFormat createUser(UserDTO userDTO) {
+        User userEmail = userRepository.findByGmail(userDTO.getGmail());
+        if (userEmail != null) {
+            return ResponseFormat.commonResponse("Duplicate Email", null, ResponseFormat.statusResponse.FAIL.toString());
+        }
         if (userDTO == null) {
             return ResponseFormat.simpleNotExits();
         }
@@ -64,8 +68,9 @@ public class UserService {
         Page<FriendDTO> friendDTO =  null;
         if (page == null || size == null) {
             friendDTO = userRepository.findFriendsById(idLogin, Pageable.unpaged());
+        } else {
+            friendDTO = userRepository.findFriendsById(idLogin, PageRequest.of(--page, size));
         }
-        friendDTO = userRepository.findFriendsById(idLogin, PageRequest.of(--page, size));
         if (friendDTO.isEmpty()) {
             return ResponseFormat.simpleNotExits();
         }

@@ -16,6 +16,8 @@ import org.springframework.data.domain.PageRequest;
 import org.springframework.data.domain.Pageable;
 import org.springframework.stereotype.Service;
 
+import java.util.List;
+
 @Service
 public class UserService {
 
@@ -29,7 +31,7 @@ public class UserService {
     private ModelMapper mapper;
 
     public ResponseFormat login(LoginFormat loginFormat) {
-        User user = userRepository.findByGmail(loginFormat.getGmail());
+        User user = userRepository.findByUsername(loginFormat.getUsername());
         if (user == null) {
             return ResponseFormat.simpleNotExits();
         }
@@ -39,8 +41,12 @@ public class UserService {
 
     public ResponseFormat createUser(UserDTO userDTO) {
         User userEmail = userRepository.findByGmail(userDTO.getGmail());
+        User userName = userRepository.findByUsername(userDTO.getUsername());
         if (userEmail != null) {
             return ResponseFormat.commonResponse("Duplicate Email", null, ResponseFormat.statusResponse.FAIL.toString());
+        }
+        if (userName != null) {
+            return ResponseFormat.commonResponse("Duplicate Username", null, ResponseFormat.statusResponse.FAIL.toString());
         }
         if (userDTO == null) {
             return ResponseFormat.simpleNotExits();
@@ -75,5 +81,13 @@ public class UserService {
             return ResponseFormat.simpleNotExits();
         }
         return ResponseFormat.simpleSuccess(friendDTO);
+    }
+
+    public ResponseFormat searchUsers(String username) {
+        List<UserDTO> userDTO = userRepository.findUsersByUsername(username);
+        if (userDTO == null) {
+            return ResponseFormat.simpleNotExits();
+        }
+        return ResponseFormat.simpleSuccess(userDTO);
     }
 }

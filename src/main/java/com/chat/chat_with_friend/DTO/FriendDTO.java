@@ -11,7 +11,7 @@ public class FriendDTO {
 
     private Long id;
     private String fullName;
-    private String userName;
+    private String username;
     private String phoneNumber;
     private String relationship;
     private String status;

@@ -23,8 +23,14 @@ public class GroupChatController {
     }
 
     @GetMapping("/groups")
-    public ResponseEntity findGroupChatByUser(@RequestParam Long id) {
-        ResponseFormat responseFormat = groupChatService.findGroupChatByUser(id);
+    public ResponseEntity findGroupChatByUser(@RequestParam String username) {
+        ResponseFormat responseFormat = groupChatService.findGroupChatByUser(username);
+        return ResponseEntity.ok(responseFormat);
+    }
+
+    @GetMapping("/usersInGroup")
+    public ResponseEntity usersInGroup(@RequestParam Long idGroup) {
+        ResponseFormat responseFormat = groupChatService.findUserInGroupChat(idGroup);
         return ResponseEntity.ok(responseFormat);
     }
 

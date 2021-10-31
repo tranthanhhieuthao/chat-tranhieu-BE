@@ -11,6 +11,7 @@ import com.chat.chat_with_friend.Response.ResponseFormat;
 import org.modelmapper.ModelMapper;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
+import org.springframework.transaction.annotation.Transactional;
 
 @Service
 public class CommentService {
@@ -27,10 +28,11 @@ public class CommentService {
     @Autowired
     private ModelMapper mapper;
 
-    public ResponseFormat addCommentIntoGroupChat(CommentChatDTO commentChatDTO) {
+    @Transactional
+    public ResponseFormat addCommentIntoGroupChat(CommentChatDTO commentChatDTO, Long idGroupChat) {
         CommentChat commentChat = new CommentChat();
-        User user = userRepository.getById(commentChatDTO.getIdUser());
-        GroupChat groupChat = groupChatRepository.getById(commentChatDTO.getIdGroupChat());
+        User user = userRepository.findByUsername(commentChatDTO.getSender());
+        GroupChat groupChat = groupChatRepository.getById(idGroupChat);
         if (user == null || groupChat == null) {
             return ResponseFormat.simpleNotExits();
         }

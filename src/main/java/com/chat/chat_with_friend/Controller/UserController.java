@@ -39,4 +39,10 @@ public class UserController {
         ResponseFormat responseFormat = userService.findFriends(idLogin, page, size);
         return ResponseEntity.ok(responseFormat);
     }
+
+    @GetMapping("/searchUser")
+    public ResponseEntity searchUsers(@RequestParam String username) {
+        ResponseFormat responseFormat = userService.searchUsers(username);
+        return ResponseEntity.ok(responseFormat);
+    }
 }

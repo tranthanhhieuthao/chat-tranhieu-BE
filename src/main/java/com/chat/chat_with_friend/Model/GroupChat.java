@@ -21,9 +21,13 @@ public class GroupChat extends BaseClass {
     // single, double, many
     private String typeGroup;
 
-    @OneToMany(fetch = FetchType.LAZY, mappedBy = "group_chat")
-    private Set<User> users;
+    @ManyToOne(fetch = FetchType.EAGER)
+    @JoinColumn(name = "user_id")
+    private User userCreate;
 
-    @OneToMany(fetch = FetchType.LAZY)
+    @OneToMany(fetch = FetchType.EAGER)
+    private Set<GroupUserDetail> GroupUsers;
+
+    @OneToMany(fetch = FetchType.EAGER)
     private Set<CommentChat> commentChats;
 }

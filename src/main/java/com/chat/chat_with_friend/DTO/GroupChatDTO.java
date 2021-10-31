@@ -16,5 +16,14 @@ public class GroupChatDTO {
     private String nameGroup;
     // single, double, many
     private String typeGroup;
+    private String userCreate;
+
+    public GroupChatDTO(Long id, Long limitJoinGroup, String nameGroup, String typeGroup) {
+        this.id = id;
+        this.limitJoinGroup = limitJoinGroup;
+        this.nameGroup = nameGroup;
+        this.typeGroup = typeGroup;
+    }
+
 
 }

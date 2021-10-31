@@ -19,7 +19,7 @@ public class User extends BaseClass {
     private String fullName;
 
     @Column(name = "user_name")
-    private String userName;
+    private String username;
 
     @Column(name = "sex")
     private String sex;
@@ -40,11 +40,17 @@ public class User extends BaseClass {
     @Column(name = "status")
     private String status;
 
-    @OneToMany(fetch = FetchType.LAZY, mappedBy = "user")
+    @OneToMany(fetch = FetchType.EAGER, mappedBy = "user")
     private Set<AddFriend> friends;
 
-    @OneToMany(fetch = FetchType.LAZY)
+    @OneToMany(fetch = FetchType.EAGER)
     private Set<CommentChat> commentChats;
+
+    @OneToMany(fetch = FetchType.EAGER)
+    private Set<GroupUserDetail> GroupUsers;
+
+    @OneToMany(fetch = FetchType.EAGER)
+    private Set<GroupChat> hostGroupChats;
 
 
 

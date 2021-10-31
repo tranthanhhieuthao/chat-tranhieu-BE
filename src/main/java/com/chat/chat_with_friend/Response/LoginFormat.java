@@ -11,4 +11,5 @@ public class LoginFormat {
 
     private String gmail;
     private String password;
+    private String username;
 }

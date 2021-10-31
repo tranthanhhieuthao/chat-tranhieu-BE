@@ -12,10 +12,11 @@ import org.springframework.messaging.handler.annotation.Payload;
 import org.springframework.messaging.handler.annotation.SendTo;
 import org.springframework.messaging.simp.SimpMessagingTemplate;
 import org.springframework.stereotype.Controller;
+import org.springframework.web.bind.annotation.RestController;
 
 import javax.websocket.server.PathParam;
 
-@Controller
+@RestController
 public class WebSocketController {
 
     @Autowired
@@ -28,18 +29,19 @@ public class WebSocketController {
     private SimpMessagingTemplate simpMessagingTemplate;
 
     @MessageMapping({"/chat.sendMessage/{idGroupChat}"})
-    @SendTo("/topic/{idGroupChat}")
-    public ResponseEntity sendMessage(@Payload CommentChatDTO commentChatDTO, @DestinationVariable String idGroupChat) {
-        simpMessagingTemplate.convertAndSend("/topic/" + idGroupChat, commentChatDTO);
-        ResponseFormat responseFormat = commentService.addCommentIntoGroupChat(commentChatDTO,Long.valueOf(idGroupChat));
-        return ResponseEntity.ok(responseFormat);
+    public void sendMessage(@Payload CommentChatDTO commentChatDTO, @DestinationVariable String idGroupChat)  {
+        commentService.addCommentIntoGroupChat(commentChatDTO,Long.valueOf(idGroupChat));
+        if(commentChatDTO.getType().equals("CHAT")) {
+            simpMessagingTemplate.convertAndSend("/topic/" + idGroupChat, commentChatDTO);
+        }
     }
 
     @MessageMapping("/chat.addUser/{idGroupChat}")
-    @SendTo("/topic/{idGroupChat}")
-    public ResponseEntity addUser(@Payload CommentChatDTO commentChatDTO, @DestinationVariable("idGroupChat") String idGroupChat) {
-        simpMessagingTemplate.convertAndSend("/topic/" + idGroupChat, commentChatDTO);
-       ResponseFormat responseFormat = groupChatService.addUserIntoGroupChat(commentChatDTO.getIdUser(),Long.valueOf(idGroupChat));
-        return ResponseEntity.ok(responseFormat);
+    public void addUser(@Payload CommentChatDTO commentChatDTO, @DestinationVariable("idGroupChat") String idGroupChat) {
+      String nameJoin = groupChatService.addUserIntoGroupChat(commentChatDTO.getIdUser(),Long.valueOf(idGroupChat));
+        commentChatDTO.setUsernameJoin(nameJoin);
+        if(commentChatDTO.getType().equals("JOIN")) {
+            simpMessagingTemplate.convertAndSend("/topic/" + idGroupChat, commentChatDTO);
+        }
     }
 }

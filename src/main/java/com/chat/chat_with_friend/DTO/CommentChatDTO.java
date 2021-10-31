@@ -21,4 +21,15 @@ public class CommentChatDTO implements Serializable {
     // chat, join , leave
     private String type;
 
+    private String usernameJoin;
+
+    public CommentChatDTO( String sender, String comment, String status, Long countStatus, Long idGroupChat, Long idUser) {
+        this.sender = sender;
+        this.comment = comment;
+        this.status = status;
+        this.countStatus = countStatus;
+        this.idGroupChat = idGroupChat;
+        this.idUser = idUser;
+    }
+
 }

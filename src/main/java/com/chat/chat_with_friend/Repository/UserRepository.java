@@ -19,7 +19,7 @@ public interface UserRepository extends JpaRepository<User, Long> {
     @Query(value="select new com.chat.chat_with_friend.DTO.FriendDTO(userFriend.id, userFriend.fullName, userFriend.username,userFriend.phoneNumber, addFriend.status, userFriend.status) " +
             "from AddFriend addFriend inner join addFriend.userFriend userFriend inner join addFriend.user userLogin " +
             "where userLogin.id = :id",
-            countQuery  = "select userFriend.id " +
+            countQuery  = "select count(userFriend.id) " +
                     "from AddFriend addFriend inner join addFriend.userFriend userFriend inner join addFriend.user userLogin " +
                     "where userLogin.id = :id")
     Page<FriendDTO> findFriendsById(@Param("id") Long id, Pageable pageable);

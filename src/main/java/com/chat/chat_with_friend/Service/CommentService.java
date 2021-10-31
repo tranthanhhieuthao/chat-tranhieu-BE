@@ -41,6 +41,7 @@ public class CommentService {
         commentChat.setStatus(commentChatDTO.getStatus());
         commentChat.setGroupChat(groupChat);
         commentChat.setUser(user);
+        commentChatRepository.save(commentChat);
         return ResponseFormat.simpleSuccess(commentChat);
     }
 

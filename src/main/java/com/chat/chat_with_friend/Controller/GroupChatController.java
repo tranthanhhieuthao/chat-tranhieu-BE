@@ -9,7 +9,7 @@ import org.springframework.http.ResponseEntity;
 import org.springframework.stereotype.Controller;
 import org.springframework.web.bind.annotation.*;
 
-@Controller
+@RestController
 @RequestMapping("/api")
 public class GroupChatController {
 
@@ -33,5 +33,12 @@ public class GroupChatController {
         ResponseFormat responseFormat = groupChatService.findUserInGroupChat(idGroup);
         return ResponseEntity.ok(responseFormat);
     }
+
+    @GetMapping("/comments")
+    public ResponseEntity commentInGroup(@RequestParam Long idGroup, @RequestParam Integer page, @RequestParam Integer size) {
+        ResponseFormat responseFormat = groupChatService.commentsInGroup(idGroup, page, size);
+        return ResponseEntity.ok(responseFormat);
+    }
+
 
 }

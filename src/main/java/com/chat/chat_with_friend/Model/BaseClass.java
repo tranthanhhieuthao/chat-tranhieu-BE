@@ -4,10 +4,7 @@ import lombok.Data;
 import org.hibernate.annotations.CreationTimestamp;
 import org.hibernate.annotations.UpdateTimestamp;
 
-import javax.persistence.GeneratedValue;
-import javax.persistence.GenerationType;
-import javax.persistence.Id;
-import javax.persistence.MappedSuperclass;
+import javax.persistence.*;
 import java.util.Date;
 
 @Data
@@ -19,8 +16,10 @@ public class BaseClass {
     private Long id;
 
     @CreationTimestamp
+    @Column(name = "time_create")
     private Date timeCreate;
 
     @UpdateTimestamp
+    @Column(name = "time_update")
     private Date timeUpdate;
 }

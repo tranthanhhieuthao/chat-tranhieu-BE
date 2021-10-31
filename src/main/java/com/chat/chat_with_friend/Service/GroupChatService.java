@@ -1,16 +1,22 @@
 package com.chat.chat_with_friend.Service;
 
+import com.chat.chat_with_friend.DTO.CommentChatDTO;
 import com.chat.chat_with_friend.DTO.GroupChatDTO;
 import com.chat.chat_with_friend.DTO.UserDTO;
+import com.chat.chat_with_friend.Model.CommentChat;
 import com.chat.chat_with_friend.Model.GroupChat;
 import com.chat.chat_with_friend.Model.GroupUserDetail;
 import com.chat.chat_with_friend.Model.User;
+import com.chat.chat_with_friend.Repository.CommentChatRepository;
 import com.chat.chat_with_friend.Repository.GroupChatRepository;
 import com.chat.chat_with_friend.Repository.GroupUserDetailRepository;
 import com.chat.chat_with_friend.Repository.UserRepository;
 import com.chat.chat_with_friend.Response.ResponseFormat;
 import org.modelmapper.ModelMapper;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.data.domain.Page;
+import org.springframework.data.domain.PageRequest;
+import org.springframework.data.domain.Pageable;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
@@ -27,6 +33,9 @@ public class GroupChatService {
 
     @Autowired
     private UserRepository userRepository;
+
+    @Autowired
+    private CommentChatRepository commentChatRepository;
 
     @Autowired
     private ModelMapper mapper;
@@ -56,17 +65,17 @@ public class GroupChatService {
     }
 
     @Transactional
-    public ResponseFormat addUserIntoGroupChat(Long idUser, Long idGroupChat) {
+    public String addUserIntoGroupChat(Long idUser, Long idGroupChat) {
         GroupUserDetail groupUserDetail = new GroupUserDetail();
         User user = userRepository.getById(idUser);
         GroupChat groupChat = groupChatRepository.getById(idGroupChat);
         if (user == null || groupChat == null) {
-            return ResponseFormat.simpleNotExits();
+            return null;
         }
         groupUserDetail.setGroupChat(groupChat);
         groupUserDetail.setUser(user);
         groupUserDetailRepository.save(groupUserDetail);
-        return ResponseFormat.simpleSuccess(null);
+        return user.getUsername();
     }
 
     public ResponseFormat findUserInGroupChat(Long idGroupChat) {
@@ -75,5 +84,18 @@ public class GroupChatService {
             return ResponseFormat.simpleNotExits();
         }
         return ResponseFormat.simpleSuccess(userDTOS);
+    }
+
+    public ResponseFormat commentsInGroup(Long idGroupChat, Integer page, Integer size) {
+        Page<CommentChatDTO> commentChatDTOS = null;
+        if (size == null || page == null) {
+            commentChatDTOS = commentChatRepository.findCommentChatByIDGroupChat(idGroupChat, Pageable.unpaged());
+        } else {
+            commentChatDTOS = commentChatRepository.findCommentChatByIDGroupChat(idGroupChat, PageRequest.of(--page, size));
+        }
+        if (commentChatDTOS.isEmpty()) {
+            return ResponseFormat.simpleNotExits();
+        }
+        return ResponseFormat.simpleSuccess(commentChatDTOS);
     }
 }

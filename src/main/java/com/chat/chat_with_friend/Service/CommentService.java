@@ -29,12 +29,12 @@ public class CommentService {
     private ModelMapper mapper;
 
     @Transactional
-    public ResponseFormat addCommentIntoGroupChat(CommentChatDTO commentChatDTO, Long idGroupChat) {
+    public CommentChat addCommentIntoGroupChat(CommentChatDTO commentChatDTO, Long idGroupChat) {
         CommentChat commentChat = new CommentChat();
         User user = userRepository.findByUsername(commentChatDTO.getSender());
         GroupChat groupChat = groupChatRepository.getById(idGroupChat);
         if (user == null || groupChat == null) {
-            return ResponseFormat.simpleNotExits();
+            return null;
         }
         commentChat.setComment(commentChatDTO.getComment());
         commentChat.setCountStatus(commentChatDTO.getCountStatus());
@@ -42,7 +42,18 @@ public class CommentService {
         commentChat.setGroupChat(groupChat);
         commentChat.setUser(user);
         commentChatRepository.save(commentChat);
-        return ResponseFormat.simpleSuccess(commentChat);
+        return commentChat;
+    }
+
+    public ResponseFormat updateCommentReact(CommentChatDTO commentChatDTO) {
+         CommentChat commentChat = commentChatRepository.getById(commentChatDTO.getId());
+         if (commentChat == null) {
+             return ResponseFormat.simpleNotExits();
+         }
+         commentChat.setStatus(commentChatDTO.getStatus());
+         commentChat.setCountStatus(commentChatDTO.getCountStatus());
+         commentChatRepository.save(commentChat);
+         return ResponseFormat.simpleSuccess(null);
     }
 
 }

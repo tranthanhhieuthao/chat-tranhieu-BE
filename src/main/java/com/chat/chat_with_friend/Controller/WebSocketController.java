@@ -1,20 +1,16 @@
 package com.chat.chat_with_friend.Controller;
 
 import com.chat.chat_with_friend.DTO.CommentChatDTO;
-import com.chat.chat_with_friend.Response.ResponseFormat;
+import com.chat.chat_with_friend.Model.CommentChat;
 import com.chat.chat_with_friend.Service.CommentService;
 import com.chat.chat_with_friend.Service.GroupChatService;
 import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.http.ResponseEntity;
 import org.springframework.messaging.handler.annotation.DestinationVariable;
 import org.springframework.messaging.handler.annotation.MessageMapping;
 import org.springframework.messaging.handler.annotation.Payload;
-import org.springframework.messaging.handler.annotation.SendTo;
 import org.springframework.messaging.simp.SimpMessagingTemplate;
-import org.springframework.stereotype.Controller;
 import org.springframework.web.bind.annotation.RestController;
 
-import javax.websocket.server.PathParam;
 
 @RestController
 public class WebSocketController {
@@ -30,7 +26,7 @@ public class WebSocketController {
 
     @MessageMapping({"/chat.sendMessage/{idGroupChat}"})
     public void sendMessage(@Payload CommentChatDTO commentChatDTO, @DestinationVariable String idGroupChat)  {
-        commentService.addCommentIntoGroupChat(commentChatDTO,Long.valueOf(idGroupChat));
+        CommentChat cmt = commentService.addCommentIntoGroupChat(commentChatDTO,Long.valueOf(idGroupChat));
         if(commentChatDTO.getType().equals("CHAT")) {
             simpMessagingTemplate.convertAndSend("/topic/" + idGroupChat, commentChatDTO);
         }
@@ -44,4 +40,5 @@ public class WebSocketController {
             simpMessagingTemplate.convertAndSend("/topic/" + idGroupChat, commentChatDTO);
         }
     }
+
 }

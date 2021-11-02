@@ -13,7 +13,7 @@ import org.springframework.stereotype.Repository;
 @Repository
 public interface CommentChatRepository extends JpaRepository<CommentChat, Long> {
 
-    @Query(value="select new com.chat.chat_with_friend.DTO.CommentChatDTO( user.username, cmt.comment, cmt.status, cmt.countStatus,groupChat.id, user.id) " +
+    @Query(value="select new com.chat.chat_with_friend.DTO.CommentChatDTO( cmt.id,user.username, cmt.comment, cmt.status, cmt.countStatus,groupChat.id, user.id, cmt.timeCreate) " +
             "from CommentChat  cmt inner join cmt.groupChat groupChat inner join cmt.user user " +
             "where groupChat.id = :idGroup " +
             "order by cmt.id asc ",

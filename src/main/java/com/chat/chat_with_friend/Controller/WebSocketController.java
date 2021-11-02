@@ -27,6 +27,8 @@ public class WebSocketController {
     @MessageMapping({"/chat.sendMessage/{idGroupChat}"})
     public void sendMessage(@Payload CommentChatDTO commentChatDTO, @DestinationVariable String idGroupChat)  {
         CommentChat cmt = commentService.addCommentIntoGroupChat(commentChatDTO,Long.valueOf(idGroupChat));
+        commentChatDTO.setId(cmt.getId());
+        commentChatDTO.setTimeCreate(cmt.getTimeCreate());
         if(commentChatDTO.getType().equals("CHAT")) {
             simpMessagingTemplate.convertAndSend("/topic/" + idGroupChat, commentChatDTO);
         }

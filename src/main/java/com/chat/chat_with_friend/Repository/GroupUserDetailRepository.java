@@ -6,4 +6,6 @@ import org.springframework.stereotype.Repository;
 
 @Repository
 public interface GroupUserDetailRepository extends JpaRepository<GroupUserDetail, Long> {
+
+    GroupUserDetail findGroupUserDetailByGroupChat_IdAndUserId(Long groupChat_Id, Long userId);
 }

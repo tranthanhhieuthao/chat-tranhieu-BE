@@ -16,11 +16,11 @@ public class AddFriend extends BaseClass {
     // friend - FR, unfriend - UF, friendButNotNotify -FRN
     private String status;
 
-    @ManyToOne(fetch = FetchType.EAGER)
+    @ManyToOne(fetch = FetchType.LAZY)
     @JoinColumn(name = "user_id")
     private User user;
 
-    @ManyToOne(fetch = FetchType.EAGER)
+    @ManyToOne(fetch = FetchType.LAZY)
     @JoinColumn(name = "user_friend_id")
     private User userFriend;
 }

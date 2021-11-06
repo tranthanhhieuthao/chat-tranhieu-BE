@@ -56,11 +56,11 @@ public class UserService {
         return ResponseFormat.simpleSuccess(null);
     }
 
-    public ResponseFormat addFriend(Long idLogin, Long idFriend) {
+    public ResponseFormat addFriend(String userLoginStr, String userFriendStr) {
         AddFriend addFriend = new AddFriend();
         addFriend.setStatus(Const.NEW_FRIEND);
-        User userLogin = userRepository.getById(idLogin);
-        User userFriend = userRepository.getById(idFriend);
+        User userLogin = userRepository.findByUsername(userLoginStr);
+        User userFriend = userRepository.findByUsername(userFriendStr);
         if (userLogin == null || userFriend == null) {
             return ResponseFormat.simpleNotExits();
         }
@@ -70,12 +70,12 @@ public class UserService {
         return ResponseFormat.simpleSuccess(null);
     }
 
-    public ResponseFormat findFriends(Long idLogin, Integer page, Integer size) {
+    public ResponseFormat findFriends(String username, Integer page, Integer size) {
         Page<FriendDTO> friendDTO =  null;
         if (page == null || size == null) {
-            friendDTO = userRepository.findFriendsById(idLogin, Pageable.unpaged());
+            friendDTO = userRepository.findFriendsByUsername(username, Pageable.unpaged());
         } else {
-            friendDTO = userRepository.findFriendsById(idLogin, PageRequest.of(--page, size));
+            friendDTO = userRepository.findFriendsByUsername(username, PageRequest.of(--page, size));
         }
         if (friendDTO.isEmpty()) {
             return ResponseFormat.simpleNotExits();
@@ -83,8 +83,26 @@ public class UserService {
         return ResponseFormat.simpleSuccess(friendDTO);
     }
 
-    public ResponseFormat searchUsers(String username) {
-        List<UserDTO> userDTO = userRepository.findUsersByUsername(username);
+    public ResponseFormat searchUsers(String username, Integer page, Integer size) {
+        Page<UserDTO> userDTO = null;
+        if (page == null || size == null) {
+            userDTO = userRepository.findUsersByUsername(username, Pageable.unpaged());
+        } else {
+            userDTO = userRepository.findUsersByUsername(username, PageRequest.of(--page, size));
+        }
+        if (userDTO == null) {
+            return ResponseFormat.simpleNotExits();
+        }
+        return ResponseFormat.simpleSuccess(userDTO);
+    }
+
+    public ResponseFormat searchFriend(String usernameLogin, String username, Integer page, Integer size) {
+        Page<UserDTO> userDTO = null;
+        if (page == null || size == null) {
+            userDTO = userRepository.findFriendByUsername(usernameLogin,username, Pageable.unpaged());
+        } else {
+            userDTO = userRepository.findFriendByUsername(usernameLogin,username, PageRequest.of(--page, size));
+        }
         if (userDTO == null) {
             return ResponseFormat.simpleNotExits();
         }

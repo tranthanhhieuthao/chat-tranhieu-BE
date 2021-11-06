@@ -69,7 +69,8 @@ public class GroupChatService {
         GroupUserDetail groupUserDetail = new GroupUserDetail();
         User user = userRepository.getById(idUser);
         GroupChat groupChat = groupChatRepository.getById(idGroupChat);
-        if (user == null || groupChat == null) {
+        GroupUserDetail groupUserDetail1 = groupUserDetailRepository.findGroupUserDetailByGroupChat_IdAndUserId(idGroupChat, idUser);
+        if (user == null || groupChat == null || groupUserDetail1 != null) {
             return null;
         }
         groupUserDetail.setGroupChat(groupChat);

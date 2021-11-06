@@ -43,4 +43,11 @@ public class WebSocketController {
         }
     }
 
+    @MessageMapping("/group.addUser")
+    public void listGroupRefresh(@Payload CommentChatDTO commentChatDTO) {
+        if(commentChatDTO.getType().equals("ADD_GROUP")) {
+            simpMessagingTemplate.convertAndSend("/topic/group" , commentChatDTO);
+        }
+    }
+
 }

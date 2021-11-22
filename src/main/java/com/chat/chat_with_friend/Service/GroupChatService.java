@@ -44,8 +44,8 @@ public class GroupChatService {
     public ResponseFormat createGroupChat(GroupChatDTO groupChatDTO) {
         User user = userRepository.findByUsername(groupChatDTO.getUserCreate());
         GroupChat groupChat = mapper.map(groupChatDTO, GroupChat.class);
-        if (groupChat == null || user == null) {
-            return ResponseFormat.simpleNotExits();
+        if (groupChat != null || user == null) {
+            return ResponseFormat.simpleBadRequest(null);
         }
         groupChat.setUserCreate(user);
         groupChat = groupChatRepository.saveAndFlush(groupChat);

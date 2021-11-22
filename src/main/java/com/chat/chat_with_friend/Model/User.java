@@ -12,7 +12,7 @@ import java.util.Set;
 @NoArgsConstructor
 @AllArgsConstructor
 @Entity
-@Table(name = "userChat")
+@Table(name = "user_chat")
 public class User extends BaseClass {
 
     @Column(name = "full_name")
